@@ -1,0 +1,13 @@
+{
+	"name": "jtony-social-nodejs",
+	"description": "Project for study porpouses",
+	"author": "José Antonio <jtony.net@gmail.com>",
+	"version": "0.0.1",
+	"private": true,
+
+
+	"dependencies": {
+		"express": "3.4.7",
+		"jade": "1.11.0"
+	}
+}
