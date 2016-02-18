@@ -1,0 +1,32 @@
+{
+  "name": "jtony-social-frontend",
+  "authors": [
+    "jtonynet <jtony.net@gmail.com>"
+  ],
+  "description": "frontend client for social app make in nodejs",
+  "main": "bower.json",
+  "moduleType": [],
+  "keywords": [
+    "backbone",
+    "jquery",
+    "bootstrap",
+    "bower",
+    "client",
+    "social",
+    "jtony"
+  ],
+  "license": "MIT",
+  "homepage": "https://jtony-social.herokuapp.com/",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "public/components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "backbone": "^1.2.3",
+    "jquery": "^2.2.0",
+    "bootstrap": "^3.3.6"
+  }
+}
