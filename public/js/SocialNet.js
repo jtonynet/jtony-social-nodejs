@@ -3,13 +3,13 @@ define(['router'], function(router) {
 		checkLogin(runApplication);
 	};
 
-	var checkLogin = function() {
+	var checkLogin = function(callback) {
 		$.ajax("/account/authenticated", {
 			method: "GET",
 			sucess: function() {
 				return callback(true);
 			},
-			error: function() {
+			error: function(data) {
 				return callback(false);
 			}
 		});
@@ -17,9 +17,9 @@ define(['router'], function(router) {
 
 	var runApplication = function(authenticated) {
 		if(!authenticated) {
-			Window.location.hash = 'login';
+			window.location.hash = 'login';
 		} else {
-			Window.location.hash = 'index';
+			window.location.hash = 'index';
 		}
 		Backbone.history.start();
 	};

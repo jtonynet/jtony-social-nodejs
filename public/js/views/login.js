@@ -8,8 +8,8 @@ define(['text!templates/login.html'], function(loginTemplate){
 
 		login: function(){
 			$.post('/login', {
-				email: $('input[name=email]').val();
-				password: $('input[name=password]').val();
+				email: $('input[name=email]').val(),
+				password: $('input[name=password]').val(),
 			}, function(data) {
 				console.log(data);
 			}).error(function(){
