@@ -3,9 +3,12 @@ require.config({
 		jQuery: '/public/libs/jquery/dist/jquery.min',
 		Underscore: '/public/libs/underscore/underscore-min',
 		Backbone: '/public/libs/backbone/backbone-min',
+		models: 'models',
 		Bootstrap: '/public/libs/bootstrap/dist/js/bootstrap.min',
 		text: '/public/libs/text/text',
-		templates: '../templates'
+		templates: '../templates',
+
+		SocialNetView: '/public/js/SocialNetView'
 	},
 
 	shim: {

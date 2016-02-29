@@ -1,6 +1,14 @@
 module.exports = function(config, mongoose, nodemailer) {
 	var crypto = require('crypto');
 
+	var Status = new mongoose.Schema({
+		name: {
+			first: {type: String},
+			last: {type: String}
+		},
+		status: {type: String}
+	});
+
 	var AccountSchema = new mongoose.Schema({
 		email: {type: String, unique: true},
 		password: {type: String},
@@ -15,6 +23,8 @@ module.exports = function(config, mongoose, nodemailer) {
 		},
 		photoUrl: {type: String},
 		biography: {type: String},
+		status: [Status], //My own update
+		activity: [Status], //My own update and friends
 	});
 
 	var Account = mongoose.model('Account', AccountSchema);
@@ -71,7 +81,13 @@ module.exports = function(config, mongoose, nodemailer) {
 		var shaSum = crypto.createHash('sha256');
 		shaSum.update(password);
 		Account.findOne({email: email, password: shaSum.diggest('hex')}, function(err, doc){
-			callback(null!=doc);
+			callback(doc);
+		});
+	};
+
+	var findById = function(accountId) {
+		Account.findOne({_id: accountId}, function(err, doc) {
+			callback(doc);
 		});
 	};
 
@@ -93,6 +109,7 @@ module.exports = function(config, mongoose, nodemailer) {
 	}
 
 	return {
+		findById: findById,
 		register: register,
 		forgotPassword: forgotPassword,
 		changePassword: changePassword,
