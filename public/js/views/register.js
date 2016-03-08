@@ -1,9 +1,11 @@
-define(['text!templates/register.html'], function(registerTemplate){
+define(['SocialNetView', 'text!templates/register.html'], function(SocialNetView, registerTemplate){
 	var registerView = Backbone.View.extend({
+		requireLogin: false,
+		
 		el: $('#content'),
 
 		events: {
-			"Submit form": "register"
+			"submit form": "register"
 		},
 
 		register: function(){
@@ -15,11 +17,13 @@ define(['text!templates/register.html'], function(registerTemplate){
 			}, function(data) {
 				console.log(data);
 			});
-			return false;
 
+			console.log('register post data');
+			return false;
 		},
 
 		render: function() {
+			console.log('renderizando register');
 			this.$el.html(registerTemplate);
 		}
 	});

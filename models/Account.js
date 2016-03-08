@@ -40,7 +40,7 @@ module.exports = function(config, mongoose, nodemailer) {
 	var changePassword = function(accountId, newPassword) {
 		var shaSum = crypto.createHash('sha256');
 		shaSum.update(newPassword);
-		var hashedPassword = shaSum.diggest('hex');
+		var hashedPassword = shaSum.digest('hex');
 
 		Account.update(
 			{_id:accountId}, 
@@ -80,15 +80,54 @@ module.exports = function(config, mongoose, nodemailer) {
 	var login = function(email, password, callback) {
 		var shaSum = crypto.createHash('sha256');
 		shaSum.update(password);
-		Account.findOne({email: email, password: shaSum.diggest('hex')}, function(err, doc){
+		Account.findOne({email: email, password: shaSum.digest('hex')}, function(err, doc){
 			callback(doc);
 		});
 	};
 
-	var findById = function(accountId) {
+	var findById = function(accountId, callback) {
 		Account.findOne({_id: accountId}, function(err, doc) {
 			callback(doc);
 		});
+	};
+
+	var findByString = function(searchStr, callback) {
+		var searchRegex = new RegExp(searchStr, 'i');
+		Account.find({
+			$or: [
+				{'name.full': {regex: searchRegex}}, 
+				{'name.full': {regex: searchRegex}}
+			]
+		}, callback);
+	};
+
+	var addContact = function(account, addcontact) {
+		contact = {
+			name: addcontact.name,
+			accountId: addcontact._id,
+			added: new Date(),
+			updated: new Date()
+		};
+
+		account.contacts.push(contact);
+
+		account.save(function(err) {
+			if(err) {
+				console.log('Error saving account: ' + err);
+			}
+		});
+	};
+
+	var removeContact = function(account, contactId) {
+		if(null == account.contacts) return;
+
+		account.contacts.forEach(function(contact) {
+			if(contact.accountId == contactId) {
+				account.contacts.remove(contact);
+			}
+		});
+
+		account.save();
 	};
 
 	var register = function(email, password, firstName, lastName) {
@@ -102,7 +141,7 @@ module.exports = function(config, mongoose, nodemailer) {
 				first: firstName,
 				last: lastName
 			},
-			password: shaSum.diggest('hex')
+			password: shaSum.digest('hex')
 		});
 		user.save(registerCallback);
 		console.log('Save command was sent');
@@ -114,6 +153,9 @@ module.exports = function(config, mongoose, nodemailer) {
 		forgotPassword: forgotPassword,
 		changePassword: changePassword,
 		login: login,
+		findByString: findByString,
+		addContact: addContact,
+		removeContact: removeContact,
 		Account: Account		
 	}
 }

@@ -9,10 +9,19 @@ define(['SocialNetView',
 					"Submit form": "updateStatus"
 				},
 
-				initialize: function() {
-					//console.log(this);
-					this.collection.on('add', this.onStatusAdded, this);
-					this.collection.on('reset', this.onStatusCollectionReset, this);
+				initialize: function() { 
+					console.log('1- ');
+					console.log(this);
+					//TODO: SOLVE THIS PROBLEM 'collectionvis undefined' router.js/index not populate collection
+						//http://stackoverflow.com/questions/13794279/having-trouble-rendering-backbone-js-collection-view-getting-uncaught-typeerro
+
+					console.log("2- initialize index.js");
+
+					if(undefined != this.collection) {
+						console.log("index.js - Had a collection");
+						this.collection.on('add', this.onStatusAdded, this);
+						this.collection.on('reset', this.onStatusCollectionReset, this);
+					}			
 				},
 
 				onStatusCollectionReset: function(collection) {
@@ -24,12 +33,12 @@ define(['SocialNetView',
 
 				onStatusAdded: function(status) {
 					var statusHtml = (new StatusView({model: status})).render.el;
-					$(statusHtml).prependTo('.status_list').hide.fadeIn('slow');
+					$(statusHtml).prependTo('.status_list').hide().fadeIn('slow');
 				},
 
 				updateStatus: function() {
 					var statusText = $('input[name=status]').val();
-					var onStatusCollection = this.collection;
+					var statusCollection = this.collection;
 					$.post('/accounts/me/status', {
 						status: statusText
 					}, function(data) {
