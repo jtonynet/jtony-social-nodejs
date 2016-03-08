@@ -6,19 +6,16 @@ define(['router'], function(router) {
 	var checkLogin = function(callback) {
 		$.ajax("/account/authenticated", {
 			method: "GET",
-			sucess: function() {
-				console.log('3- checkLogin TRUE');
+			success: function() {
 				return callback(true);
 			},
 			error: function(data) {
-				console.log('3- checkLogin FALSE');
 				return callback(false);
 			}
 		});
 	};
 
 	var runApplication = function(authenticated) {
-		console.log("4- authenticated: "+authenticated);
 		if(!authenticated) {
 			window.location.hash = 'login';
 		} else {

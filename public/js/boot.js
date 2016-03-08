@@ -1,3 +1,4 @@
+
 require.config({
 	paths: {
 		jQuery: '/public/libs/jquery/jquery',
@@ -16,6 +17,7 @@ require.config({
 		'SocialNet': ['Backbone']
 	}
 });
+
 
 require(['SocialNet'], function(SocialNet) {
 	SocialNet.initialize();

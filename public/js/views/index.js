@@ -1,7 +1,8 @@
 define(['SocialNetView', 
 		'text!templates/index.html', 
 		'views/status', 
-		'models/Status'], function(SocialNetView, indexTemplate, StatusView, Status) {
+		'models/Status'], 
+		function(SocialNetView, indexTemplate, StatusView, Status) {
 			var indexView = SocialNetView.extend({
 				el: $('#content'),
 
@@ -10,12 +11,8 @@ define(['SocialNetView',
 				},
 
 				initialize: function() { 
-					console.log('1- ');
-					console.log(this);
 					//TODO: SOLVE THIS PROBLEM 'collectionvis undefined' router.js/index not populate collection
 						//http://stackoverflow.com/questions/13794279/having-trouble-rendering-backbone-js-collection-view-getting-uncaught-typeerro
-
-					console.log("2- initialize index.js");
 
 					if(undefined != this.collection) {
 						console.log("index.js - Had a collection");
@@ -53,5 +50,5 @@ define(['SocialNetView',
 				}
 			});
 
-		return new indexView;
+		return indexView;
 	});

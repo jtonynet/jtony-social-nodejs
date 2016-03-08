@@ -18,12 +18,10 @@ define(['SocialNetView', 'text!templates/register.html'], function(SocialNetView
 				console.log(data);
 			});
 
-			console.log('register post data');
 			return false;
 		},
 
 		render: function() {
-			console.log('renderizando register');
 			this.$el.html(registerTemplate);
 		}
 	});
