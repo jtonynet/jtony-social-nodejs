@@ -151,7 +151,7 @@ module.exports = function(config, mongoose, Status, nodemailer) {
 		});
 
 		return false;
-	},	
+	};	
 
 	var register = function(email, password, firstName, lastName) {
 		var shaSum = crypto.createHash('sha256');
