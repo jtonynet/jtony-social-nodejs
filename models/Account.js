@@ -1,4 +1,4 @@
-module.exports = function(config, mongoose, nodemailer) {
+module.exports = function(config, mongoose, Status, nodemailer) {
 	var crypto = require('crypto');
 
 	var Status = new mongoose.Schema({
@@ -9,12 +9,23 @@ module.exports = function(config, mongoose, nodemailer) {
 		status: {type: String}
 	});
 
+	var contact = new mongoose.Schema({
+		name: {
+			first: {type: String},
+			last: {type: String}
+		},
+		accountId: {type: mongoose.Schema.ObjectId},
+		added: {type: Date},
+		updated: {type: Date}
+	});
+
 	var AccountSchema = new mongoose.Schema({
 		email: {type: String, unique: true},
 		password: {type: String},
 		name: {
 			first: {type: String},
-			last: {type: String}
+			last: {type: String},
+			full: {type: String}
 		},
 		birthday: {
 			day: {type: Number, min: 1, max: 31, rquired: false},
@@ -53,9 +64,9 @@ module.exports = function(config, mongoose, nodemailer) {
 	};
 
 	var forgotPassword = function(email, resetPassword, callback) {
-		var user = Account.findOne({email: email}, function(err, doc) {
+		var user = Account.findOne({email: email}, function findAccount(err, doc) {
 			if(err) {
-				//Endereco de email nao eh valido
+				//invalid email
 				callback(false);
 			} else {
 				var smtpTransport = nodemailer.createTransport('SMTP', config.mail);
@@ -85,20 +96,20 @@ module.exports = function(config, mongoose, nodemailer) {
 		});
 	};
 
-	var findById = function(accountId, callback) {
-		Account.findOne({_id: accountId}, function(err, doc) {
-			callback(doc);
-		});
-	};
-
 	var findByString = function(searchStr, callback) {
 		var searchRegex = new RegExp(searchStr, 'i');
 		Account.find({
 			$or: [
 				{'name.full': {regex: searchRegex}}, 
-				{'name.full': {regex: searchRegex}}
+				{'email': {regex: searchRegex}}
 			]
 		}, callback);
+	};
+
+	var findById = function(accountId, callback) {
+		Account.findOne({_id: accountId}, function(err, doc) {
+			callback(doc);
+		});
 	};
 
 	var addContact = function(account, addcontact) {
@@ -130,6 +141,18 @@ module.exports = function(config, mongoose, nodemailer) {
 		account.save();
 	};
 
+	var hasContact = function(account, contactId) {
+		if(null == account.contacts) return false;
+
+		account.contacts.forEach(function(contact) {
+			if(contact.accountId == contactId) {
+				return true;
+			}
+		});
+
+		return false;
+	},	
+
 	var register = function(email, password, firstName, lastName) {
 		var shaSum = crypto.createHash('sha256');
 		shaSum.update(password);
@@ -139,7 +162,8 @@ module.exports = function(config, mongoose, nodemailer) {
 			email: email,
 			name: {
 				first: firstName,
-				last: lastName
+				last: lastName,
+				full: firstName+' '+lastName
 			},
 			password: shaSum.digest('hex')
 		});
@@ -150,12 +174,13 @@ module.exports = function(config, mongoose, nodemailer) {
 	return {
 		findById: findById,
 		register: register,
+		hasContact: hasContact,
 		forgotPassword: forgotPassword,
 		changePassword: changePassword,
-		login: login,
 		findByString: findByString,
 		addContact: addContact,
 		removeContact: removeContact,
-		Account: Account		
+		login: login,
+		Account: Account
 	}
 }

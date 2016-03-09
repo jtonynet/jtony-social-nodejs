@@ -7,13 +7,12 @@ define(['SocialNetView',
 				el: $('#content'),
 
 				events: {
-					"Submit form": "updateStatus"
+					"submit form": "updateStatus"
 				},
 
-				initialize: function() { 
-					//TODO: SOLVE THIS PROBLEM 'collectionvis undefined' router.js/index not populate collection
-						//http://stackoverflow.com/questions/13794279/having-trouble-rendering-backbone-js-collection-view-getting-uncaught-typeerro
+				initialize: function() {
 
+					//http://stackoverflow.com/questions/13794279/having-trouble-rendering-backbone-js-collection-view-getting-uncaught-typeerro
 					if(undefined != this.collection) {
 						console.log("index.js - Had a collection");
 						this.collection.on('add', this.onStatusAdded, this);
@@ -35,6 +34,7 @@ define(['SocialNetView',
 
 				updateStatus: function() {
 					var statusText = $('input[name=status]').val();
+					console.log(statusText);
 					var statusCollection = this.collection;
 					$.post('/accounts/me/status', {
 						status: statusText
