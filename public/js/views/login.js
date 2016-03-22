@@ -1,5 +1,7 @@
-define(['text!templates/login.html'], function(loginTemplate){
-	var loginView = Backbone.View.extend({
+define(['SocialNetView', 'text!templates/login.html'], function(SocialNetView, loginTemplate){
+	var loginView = SocialNetView.extend({
+		requireLogin: false,
+		
 		el: $('#content'),
 
 		events: {

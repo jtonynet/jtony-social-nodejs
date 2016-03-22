@@ -22,11 +22,18 @@ module.exports = function(app, models) {
 				}
 			});
 		});
-	});
 
-	sio.sockets.on('connection', function(socket) {
-		var session = socket.handshake.session;
-		var accountId = session.accountId;
-		socket.join(accountId);
+		sio.sockets.on('connection', function(socket) {
+			var session = socket.handshake.session;
+			var accountId = session.accountId;
+			socket.join(accountId);
+
+			socket.on('chatClient', function(data) {
+				sio.sockets.in(data.to).emit('chatserver', {
+					from: accountId,
+					text: data.text
+				});
+			});
+		});
 	});
 }

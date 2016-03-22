@@ -6,6 +6,7 @@ define(['views/index', 'views/register', 'views/login', 'views/forgotpassword', 
 			socketEvents: _.extend({}, Backbone.Events),
 
 			routes: {
+				"addcontact": "addcontact",
 				"index": "index",
 				"login": "login",
 				"register": "register",

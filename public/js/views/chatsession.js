@@ -3,6 +3,8 @@ function(SocialNetView, chatItemTemplate) {
 	var chatItemView = SocialNetView.extend({
 		tagName: 'div',
 
+		className: 'chat_session',
+
 		$el: $(this.el);
 
 		events: {

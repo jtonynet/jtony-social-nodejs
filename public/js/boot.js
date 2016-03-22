@@ -4,6 +4,7 @@ require.config({
 		jQuery: '/public/libs/jquery/jquery',
 		Underscore: '/public/libs/underscore/underscore-min',
 		Backbone: '/public/libs/backbone/backbone',
+		Sockets: '/socket.io/socket.io',
 		models: 'models',
 		Bootstrap: '/public/libs/bootstrap/dist/js/bootstrap.min',
 		text: '/public/libs/text/text',
