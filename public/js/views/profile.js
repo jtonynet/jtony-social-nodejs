@@ -38,6 +38,7 @@ define([
 
 			render: function() {
 				var that = this;
+				console.log(this.model.toJSON());
 				this.$el.html(
 					_.template(profileTemplate, this.model.toJSON())
 				);

@@ -1,9 +1,11 @@
-var express = require('express');
-var app = express();
-var nodemailer = require('nodemailer');
-var MemoryStore = require('connect').session.MemoryStore;
-var dbPath = 'mongodb://localhost/nodebackbone';
-var mongoose = require('mongoose');
+var express		= require('express');
+var http 		= require('http');
+var nodemailer	= require('nodemailer');
+var MemoryStore	= require('connect').session.MemoryStore;
+var app			= express();
+var dbPath		= 'mongodb://localhost/nodebackbone';
+var fs			= require('fs');
+var mongoose	= require('mongoose');
 
 var config = {
 	mail: require('./config/mail')
@@ -22,13 +24,23 @@ app.configure(function() {
 	app.use(express.limit('1mb'));
 	app.use(express.bodyParser());
 	app.use(express.cookieParser());
-	app.use(express.session(
-		{secret: 'SocialNet Secret key', store: new MemoryStore()}
-	));
+	app.use(express.session({
+		secret: 'SocialNet Secret key',
+		key: 'express.sid',
+		store: app.sessionStore
+	}));
 
 	mongoose.connect(dbPath, function onMongooseError(err){
 		if (err) throw err;
 	});
+});
+
+//import routes
+fs.readdirSync('routes').forEach(function(file) {
+	if(file[0] == '.') {
+		var routeName = file.substr(0, file.indexOf('.'));
+		require('./routes/'+routeName)(app, models);
+	}
 });
 
 app.get('/', function(req, res) {

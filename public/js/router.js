@@ -3,6 +3,8 @@ define(['views/index', 'views/register', 'views/login', 'views/forgotpassword', 
 		var SocialRouter = Backbone.Router.extend({
 			currentView: null,
 
+			socketEvents: _.extend({}, Backbone.Events),
+
 			routes: {
 				"index": "index",
 				"login": "login",
@@ -35,7 +37,7 @@ define(['views/index', 'views/register', 'views/login', 'views/forgotpassword', 
 			},
 
 			login: function() {
-				this.changeView(new LoginView());
+				this.changeView(new LoginView({socketEvents: this.socketEvents}));
 			},
 
 			forgotpassword: function() {
