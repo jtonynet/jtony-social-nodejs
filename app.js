@@ -5,10 +5,24 @@ var MemoryStore		= require('connect').session.MemoryStore;
 var app				= express();
 var dbPath			= 'mongodb://localhost/nodebackbone';
 var fs				= require('fs');
+var events 			= require('events');
 var mongoose		= require('mongoose');
 
 app.server 			= http.createServer(app);
 app.sessionStore	= new MemoryStore();
+
+var eventDispatcher = new events.EventEmmiter();
+app.addEventListener = function(eventName, callback) {
+	eventDispatcher.on(eventName, callback);
+}
+
+var removeEventListener = function(eventName, callback) {
+	eventDispatcher.removeEventListener(eventName, callback);
+}
+
+app.triggerEvent = function(eventName, eventOptions) {
+	eventDispatcher.emit(eventName, eventOptions);
+}
 
 var config = {
 	mail: require('./config/mail')
