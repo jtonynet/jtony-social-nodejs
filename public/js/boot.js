@@ -1,8 +1,7 @@
-
 require.config({
 	paths: {
 		jQuery: '/public/libs/jquery/jquery',
-		Underscore: '/public/libs/underscore/underscore-min',
+		Underscore: '/public/libs/underscore/underscore',
 		Backbone: '/public/libs/backbone/backbone',
 		Sockets: '/socket.io/socket.io',
 		models: 'models',

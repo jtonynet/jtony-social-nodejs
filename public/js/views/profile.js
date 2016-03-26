@@ -31,14 +31,12 @@ define([
 			},
 
 			prependStatus: function(statusModel) {
-				//var statusHtml = (new StatusView({model: statusModel})).render().el;
-				var statusHtml = '<li>'+statusModel.attributes.status+'</li>';
+				var statusHtml = (new StatusView({ model: statusModel })).render().el;
 				$(statusHtml).prependTo('.status_list').hide().fadeIn('slow');
 			},
 
 			render: function() {
 				var that = this;
-				console.log(this.model.toJSON());
 				this.$el.html(
 					_.template(profileTemplate, this.model.toJSON())
 				);

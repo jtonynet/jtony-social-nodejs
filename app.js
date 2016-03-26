@@ -11,7 +11,7 @@ var mongoose		= require('mongoose');
 app.server 			= http.createServer(app);
 app.sessionStore	= new MemoryStore();
 
-var eventDispatcher = new events.EventEmmiter();
+var eventDispatcher = new events.EventEmitter();
 app.addEventListener = function(eventName, callback) {
 	eventDispatcher.on(eventName, callback);
 }
@@ -56,10 +56,10 @@ app.configure(function() {
 
 //import routes
 fs.readdirSync('routes').forEach(function(file) {
-	if(file[0] != '.') {
-		var routeName = file.substr(0, file.indexOf('.'));
-		require('./routes/'+routeName)(app, models);
-	}
+	if(file[0] == '.') return;
+	
+	var routeName = file.substr(0, file.indexOf('.'));
+	require('./routes/'+routeName)(app, models);
 });
 
 app.get('/', function(req, res) {

@@ -51,7 +51,6 @@ define(['views/index', 'views/register', 'views/login', 'views/forgotpassword', 
 
 			profile: function(id) {
 				var model = new Account({id: id});
-				console.log(model.attributes);
 				this.changeView(new ProfileView({model: model}));
 				model.fetch();
 			},
