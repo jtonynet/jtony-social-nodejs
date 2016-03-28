@@ -88,7 +88,6 @@ module.exports = function(app, models) {
 			res.send(400);
 			return;
 		}
-
 		models.Account.findById(accountId, function(account) {
 			if(account) {
 				models.Account.findById(contactId, function(contact) {

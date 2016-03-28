@@ -34,7 +34,7 @@ module.exports = function(config, mongoose, Status, nodemailer) {
 		},
 		photoUrl: {type: String},
 		biography: {type: String},
-    contact: [Contact],
+		contacts: [Contact],
 		status: [Status], //My own update
 		activity: [Status], //My own update and friends
 	});

@@ -29,7 +29,7 @@ function(SocialNetView, Contact, ContactView, addcontactTemplate) {
 					var contactModel = new Contact(contactJson);
 					var contactHtml = (new ContactView(
 											{addButton: true, model: contactModel}
-									  )).render.el;
+									  )).render().el;
 					$('#results').append(contactHtml);
 				});
 			}
