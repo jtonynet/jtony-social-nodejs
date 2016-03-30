@@ -17,7 +17,6 @@ define([
 			},
 
 			postStatus: function() {
-				console.log('ok');
 				var that = this;
 				var statusText = $('input[name=status]').val();
 				var statusCollection = this.collection;
@@ -44,6 +43,7 @@ define([
 				var statusCollection = this.model.get('status');
 				if(null != statusCollection) {
 					_.each(statusCollection, function(statusJson) {
+						console.log(statusJson);
 						var statusModel = new Status(statusJson);
 						that.prependStatus(statusModel);
 					});

@@ -88,6 +88,10 @@ module.exports = function(app, models) {
 			res.send(400);
 			return;
 		}
+		
+		console.log('Me: '+accountId);
+		console.log('contact: '+contactId);
+
 		models.Account.findById(accountId, function(account) {
 			if(account) {
 				models.Account.findById(contactId, function(contact) {
@@ -96,6 +100,7 @@ module.exports = function(app, models) {
 					//inverse link for friendship
 					models.Account.addContact(contact, account);
 					account.save();
+					console.log('ok man!');
 				});
 			}
 		});

@@ -11,10 +11,8 @@ define(['SocialNetView',
 				},
 
 				initialize: function() {
-
 					//http://stackoverflow.com/questions/13794279/having-trouble-rendering-backbone-js-collection-view-getting-uncaught-typeerro
 					if(undefined != this.collection) {
-						console.log("index.js - Had a collection");
 						this.collection.on('add', this.onStatusAdded, this);
 						this.collection.on('reset', this.onStatusCollectionReset, this);
 					}			
@@ -28,7 +26,7 @@ define(['SocialNetView',
 				},
 
 				onStatusAdded: function(status) {
-					var statusHtml = (new StatusView({model: status})).render.el;
+					var statusHtml = (new StatusView({model: status})).render().el;
 					$(statusHtml).prependTo('.status_list').hide().fadeIn('slow');
 				},
 

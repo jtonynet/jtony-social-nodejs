@@ -99,7 +99,6 @@ module.exports = function(config, mongoose, Status, nodemailer) {
 
 	var findByString = function(searchStr, callback) {
 		var searchRegex = new RegExp(searchStr, 'i');
-		console.log(searchStr);
 		Account.find({
 			$or: [
 				{'name.full': {$regex: searchRegex}}, 
