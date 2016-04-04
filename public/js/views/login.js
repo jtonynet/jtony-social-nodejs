@@ -17,7 +17,7 @@ define(['SocialNetView', 'text!templates/login.html'], function(SocialNetView, l
 			$.post('/login', 
 				this.$('form').serialize(), function(data) {
 					//console.log(data);
-					socketEvents.trigger('app:loggedin');
+					socketEvents.trigger('app:loggedin', data);
 					window.location.hash = 'index';
 			}).error(function(){
 				$('#error').text('Unable to Login.');
@@ -30,6 +30,7 @@ define(['SocialNetView', 'text!templates/login.html'], function(SocialNetView, l
 		render: function() {
 			this.$el.html(loginTemplate);
 			$('#error').hide();
+			$('input[name=email]').focus();
 		}
 	});
 

@@ -14,22 +14,22 @@ app.sessionStore	= new MemoryStore();
 var eventDispatcher = new events.EventEmitter();
 app.addEventListener = function(eventName, callback) {
 	eventDispatcher.on(eventName, callback);
-}
+};
 
-var removeEventListener = function(eventName, callback) {
-	eventDispatcher.removeEventListener(eventName, callback);
-}
+app.removeEventListener = function(eventName, callback) {
+	eventDispatcher.removeListener(eventName, callback);
+};
 
 app.triggerEvent = function(eventName, eventOptions) {
 	eventDispatcher.emit(eventName, eventOptions);
-}
+};
 
 var config = {
 	mail: require('./config/mail')
 };
 
 var models = {
-	Account: require('./models/Account')(config, mongoose, nodemailer)
+	Account: require('./models/Account')(app, config, mongoose, nodemailer)
 };
 
 app.configure(function() {

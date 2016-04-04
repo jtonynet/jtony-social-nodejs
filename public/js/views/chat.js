@@ -24,7 +24,7 @@ function(SocialNetView, ChatSessionView, ChatItemView, chatItemTemplate) {
 			}
 		},
 
-		renderCollection: function() {
+		renderCollection: function(collection) {
 			var that = this;
 			$('.chat_list').empty();
 			collection.each(function(contact) {

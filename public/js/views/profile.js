@@ -12,7 +12,8 @@ define([
 				"submit form": "postStatus"
 			},
 
-			initialize: function() {
+			initialize: function(options) {
+				this.socketEvents = options.socketEvents;
 				this.model.bind('change', this.render, this);
 			},
 
@@ -22,11 +23,14 @@ define([
 				var statusCollection = this.collection;
 				$.post('/accounts/'+this.model.get('_id')+'/status', {
 					status: statusText
-				}, function(data) {
-					that.prependStatus(new Status({status: statusText}));
 				});
 
 				return false;				
+			},
+
+			onSocketStatusAdded: function(data) {
+				var newStatus = data.data;
+				this.prependStatus(new Status({status: newStatus.status, name: newStatus.name}));
 			},
 
 			prependStatus: function(statusModel) {
@@ -35,6 +39,10 @@ define([
 			},
 
 			render: function() {
+				if(this.model.get('_id')) {
+					this.socketEvents.bind('status:'+this.model.get('id'), this.onSocketStatusAdded, this);
+				}
+
 				var that = this;
 				this.$el.html(
 					_.template(profileTemplate, this.model.toJSON())
@@ -43,7 +51,7 @@ define([
 				var statusCollection = this.model.get('status');
 				if(null != statusCollection) {
 					_.each(statusCollection, function(statusJson) {
-						console.log(statusJson);
+						//console.log(statusJson);
 						var statusModel = new Status(statusJson);
 						that.prependStatus(statusModel);
 					});

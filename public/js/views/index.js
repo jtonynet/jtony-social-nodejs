@@ -10,9 +10,10 @@ define(['SocialNetView',
 					"submit form": "updateStatus"
 				},
 
-				initialize: function() {
+				initialize: function(options) {
 					//http://stackoverflow.com/questions/13794279/having-trouble-rendering-backbone-js-collection-view-getting-uncaught-typeerro
 					if(undefined != this.collection) {
+						options.socketEvents.bind('status:me', this.onSocketStatusAdded, this);
 						this.collection.on('add', this.onStatusAdded, this);
 						this.collection.on('reset', this.onStatusCollectionReset, this);
 					}			
@@ -25,6 +26,22 @@ define(['SocialNetView',
 					});
 				},
 
+				onSocketStatusAdded: function(data) {
+					var newStatus = data.data;
+					var found = false;
+
+					this.collection.forEach(function(status) {
+						var name = status.get('name');
+						if (name && name.full == newStatus.name && status.get('status') == newStatus.status) {
+							found = true;
+						}
+					});
+
+					if(!found) {
+						this.collection.add({status: newStatus.status, name: newStatus.name});
+					}
+				},				
+
 				onStatusAdded: function(status) {
 					var statusHtml = (new StatusView({model: status})).render().el;
 					$(statusHtml).prependTo('.status_list').hide().fadeIn('slow');
@@ -32,12 +49,10 @@ define(['SocialNetView',
 
 				updateStatus: function() {
 					var statusText = $('input[name=status]').val();
-					console.log(statusText);
+					//console.log(statusText);
 					var statusCollection = this.collection;
 					$.post('/accounts/me/status', {
 						status: statusText
-					}, function(data) {
-						statusCollection.add(new Status({status: statusText}));
 					});
 
 					return false;

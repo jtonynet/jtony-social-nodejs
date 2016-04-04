@@ -5,7 +5,7 @@ function(SocialNetView, chatItemTemplate) {
 
 		className: 'chat_session',
 
-		$el: $(this.el);
+		$el: $(this.el),
 
 		events: {
 			'submit form': 'sendChat',
@@ -13,11 +13,37 @@ function(SocialNetView, chatItemTemplate) {
 
 		initialize: function(options) {
 			this.socketEvents = options.socketEvents;
+			var accountId = this.model.get('accountId');
 			this.socketEvents.on(
-				'socket:chat:in:' + this.model.get('accountId'),
+				'socket:chat:in:' + accountId,
 				this.receiveChat,
 				this
 			);
+
+			this.socketEvents.bind(
+				'login:' + accountId,
+				this.handleContactLogin,
+				this
+			);
+
+			this.socketEvents.bind(
+				'logout:' + accountId,
+				this.handleContactLogout,
+				this
+			);
+		},
+
+		handleContactLogin: function() {
+			this.$el.find('.online_indicator').addClass('online');
+			this.model.set('online', true);
+		},
+
+		handleContactLogout: function() {
+			this.model.set('online', false);
+			$onlineIndicador = this.$el.find('.online_indicator');
+			while( $onlineIndicador.hasClass('online') ) {
+				$onlineIndicador.removeClass('online');
+			}
 		},
 
 		receiveChat: function(data) {
@@ -25,7 +51,7 @@ function(SocialNetView, chatItemTemplate) {
 			this.$el.find('.chat_log').append($('<li>' + chatLine + '</li>'));
 		},
 
-		sendChat: function(data) {
+		sendChat: function() {
 			var chatText = this.$el.find('input[name=chat]').val();
 			if ( chatText && /[^\s]+/.test(chatText) ) {
 				var chatLine = 'Me: ' + chatText;
@@ -40,9 +66,13 @@ function(SocialNetView, chatItemTemplate) {
 		},		
 
 		render: function() {
-			this.$el.html.(_.template(chatItemTemplate, {
+			this.$el.html(_.template(chatItemTemplate, {
 				model: this.model.toJSON()
-			}))
+			}));
+			if (this.model.get('online') ){
+				this.handleContactLogout;
+			}
+
 			return this;
 		}
 	});
