@@ -36,7 +36,7 @@ app.configure(function() {
 	app.sessionSecret = 'SocialNet Secret key';
 
 	app.httpSchema = process.env.PORT ? 'https' : 'http';
-	app.processPort = process.env.PORT ? process.env.PORT : 8083;
+	app.processPort = process.env.PORT || 8083;
 
 	app.set('view engine', 'jade');
 	app.use('/public', express.static(__dirname+'/public'));
