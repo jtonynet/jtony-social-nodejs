@@ -1,67 +1,86 @@
-var express = require('express');
-var events = require('events');
+var express			= require('express');
+var http 			= require('http');
+var nodemailer		= require('nodemailer');
+var MemoryStore		= require('connect').session.MemoryStore;
+var app				= express();
+var dbPath			= process.env.MONGODB ? 'mongodb://localhost/nodebackbone';
+var fs				= require('fs');
+var events 			= require('events');
+var mongoose		= require('mongoose');
 
-var app = express();
-var eventEmitter = new events.EventEmitter();
+app.server 			= http.createServer(app);
+app.sessionStore	= new MemoryStore();
 
-app.set('view engine', 'jade');
-app.set('view options', {layout: true});
-app.set('views', __dirname + '/views');
+var eventDispatcher = new events.EventEmitter();
+app.addEventListener = function(eventName, callback) {
+	eventDispatcher.on(eventName, callback);
+};
 
-function mainLoop() {
-	console.log('Starting application');
-	eventEmitter.emit('ApplicationStart');
+app.removeEventListener = function(eventName, callback) {
+	eventDispatcher.removeListener(eventName, callback);
+};
 
-	console.log('Running application');
-	eventEmitter.emit('ApplicationRun');
+app.triggerEvent = function(eventName, eventOptions) {
+	eventDispatcher.emit(eventName, eventOptions);
+};
 
-	console.log('Stopping application');
-	eventEmitter.emit('ApplicationStop');
-}
+var config = {
+	mail: require('./config/mail')
+};
 
-function onApplicationStart() {
-	console.log('Handling Application Start Event');
-}
+var models = {
+	Account: require('./models/Account')(app, config, mongoose, nodemailer)
+};
 
-function onApplicationRun() {
-	console.log('Handling Application Running Event');
-}
+app.configure(function() {
+	app.sessionSecret = 'SocialNet Secret key';
 
-function onApplicationStop() {
-	console.log('Handling Application Stop Event');
-}
+	app.httpSchema = process.env.PORT ? 'https' : 'http';
+	app.processPort = process.env.PORT ? process.env.PORT : 8083;
 
-mainLoop();
+	app.set('view engine', 'jade');
+	app.use('/public', express.static(__dirname+'/public'));
+	app.use(express.limit('1mb'));
+	app.use(express.bodyParser());
+	app.use(express.cookieParser());
+	app.use(express.session({
+		secret: app.sessionSecret,
+		key: 'express.sid',
+		store: app.sessionStore
+	}));
 
-eventEmitter.on('ApplicationStart', onApplicationStart);
-eventEmitter.on('ApplicationRun', onApplicationRun);
-eventEmitter.on('ApplicationStop', onApplicationStop);
-
-app.get('/stooges/:name?', function(req, res, next) {
-	var name = req.params.name;
-
-	switch (name ? name.toLowerCase() : '') {
-		case 'larry':
-		case 'curly':
-		case 'moe':
-			res.render('stooges', {stooge: name});
-			break;
-
-		default:
-			next();	
-	}
+	mongoose.connect(dbPath, function onMongooseError(err){
+		if (err) throw err;
+	});
 });
 
-app.get('/stooges/*?', function(req, res) {
-	res.render('stooges', {stooge: null});
+//import routes
+fs.readdirSync('routes').forEach(function(file) {
+	if(file[0] == '.') return;
+	
+	var routeName = file.substr(0, file.indexOf('.'));
+	require('./routes/'+routeName)(app, models);
 });
 
 app.get('/', function(req, res) {
-	res.render('index');
+	res.render('index.jade')
 });
 
-//var processPort = process.env.PORT ? process.env.PORT : 3000;
-var processPort = process.env.PORT ? process.env.PORT : 8080;
+app.post('/contacts/find', function(req, res) {
+	var searchStr = req.param('searchStr', null);
+	if(null == searchStr) {
+		res.send(400);
+		return;
+	}
 
-app.listen(processPort);
-console.log('listening on port ' + processPort);
+	models.Account.findByString(searchStr, function onSearchDone(err, accounts) {
+		if(err || accounts.length == 0) {
+			res.send(404);
+		} else {
+			res.send(accounts);
+		}
+	});
+});
+
+app.server.listen(app.processPort);
+console.log('listening on port ' + app.processPort);

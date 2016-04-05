@@ -1,0 +1,14 @@
+{
+  "name": "backbone",
+  "homepage": "https://github.com/jashkenas/backbone",
+  "version": "0.9.2",
+  "_release": "0.9.2",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.9.2",
+    "commit": "863814e519e630806096aa3ddeef520afbb263ff"
+  },
+  "_source": "git://github.com/jashkenas/backbone.git",
+  "_target": "0.9.2",
+  "_originalSource": "backbone"
+}

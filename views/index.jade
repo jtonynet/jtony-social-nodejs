@@ -1,4 +1,10 @@
 extends layout
 
+block styles
+	style(type='text/css', src='/public/styles/style.css')
+
+block backbone
+	script(data-main='public/js/boot', type='text/javascript', src='/public/libs/requirejs/require.js')
+
 block content
-	h1 Hello World
+	div#content
