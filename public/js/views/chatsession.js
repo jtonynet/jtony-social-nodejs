@@ -12,6 +12,9 @@ function(SocialNetView, chatItemTemplate) {
 		},
 
 		initialize: function(options) {
+			console.log('options');
+			console.log(options);
+
 			this.socketEvents = options.socketEvents;
 			var accountId = this.model.get('accountId');
 			this.socketEvents.on(
@@ -49,19 +52,26 @@ function(SocialNetView, chatItemTemplate) {
 		receiveChat: function(data) {
 			var chatLine = this.model.get('name').first + ': ' + data.text;
 			this.$el.find('.chat_log').append($('<li>' + chatLine + '</li>'));
+			console.log('Recebendo chat: '+chatLine);
 		},
 
 		sendChat: function() {
-			var chatText = this.$el.find('input[name=chat]').val();
+			var chatText = this.$el.find('input[name=chat]').val()
+			var socketEvents = this.socketEvents;
+
 			if ( chatText && /[^\s]+/.test(chatText) ) {
+				console.log('entrei no if para: '+this.model.get('accountId'));
 				var chatLine = 'Me: ' + chatText;
 				this.$el.find('.chat_log').append($('<li>' + chatLine + '</li>'));
-				this.socketEvents.trigger('socket:chat', {
+
+				socketEvents.trigger('socket:chat', {
 					to: this.model.get('accountId'),
 					text: chatText
 				});
 			}
 
+			console.log('Enviando chat: '+chatLine);
+			console.log(socketEvents);
 			return false;
 		},		
 

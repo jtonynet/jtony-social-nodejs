@@ -10,6 +10,9 @@ function(SocialNetView, chatItemTemplate) {
 		},
 
 		initialize: function(options) {
+			console.log('iniciei chat item');
+
+			this.model = options.model;
 			var accountId = this.model.get('accountId');
 			options.socketEvents.bind(
 				'login:'+accountId,
@@ -29,8 +32,9 @@ function(SocialNetView, chatItemTemplate) {
 		},
 
 		handleContactLogin: function() {
+			console.log('chat item ficou ON');
 			this.model.set('online', true),
-			this.$el.find('.online').addClass('online');
+			this.$el.find('.online_indicator').addClass('online');			
 		},
 
 		handleContactLogout: function() {
@@ -42,10 +46,14 @@ function(SocialNetView, chatItemTemplate) {
 		},
 
 		startChatSession: function() {
+			console.log('chat session iniciada');
+			console.log('--->');
+			console.log(this.model);
 			this.trigger('chat:start', this.model);
 		},
 
 		render: function() {
+			console.log('renderiza chat item');
 			this.$el.html(_.template(chatItemTemplate, {
 				model: this.model.toJSON()
 			}));

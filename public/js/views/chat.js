@@ -1,11 +1,20 @@
 define(['SocialNetView', 'views/chatsession', 'views/chatitem','text!templates/chat.html'],
 function(SocialNetView, ChatSessionView, ChatItemView, chatItemTemplate) {
+
+  /*
+    TODO: 
+      renderCollection não conseguia escrever no $('.chat_list') movi a ul dessa classe
+      de text!templates/chat.html para o layout jade e aparentemente resolveu
+      text!templates/chat.html == chatItemTemplate
+  */
+
 	var chatView = SocialNetView.extend({
 		el: $('#chat'),
 
 		chatSessions: {},
 
 		initialize: function(options) {
+      this.render();
 			this.socketEvents = options.socketEvents;
 			this.collection.on('reset', this.renderCollection, this);
 		},
@@ -14,14 +23,20 @@ function(SocialNetView, ChatSessionView, ChatItemView, chatItemTemplate) {
 			this.$el.html(chatItemTemplate);
 		},
 
-		startChatSession: function() {
-			var accountId = model.get('accountId');
+		startChatSession: function(model) {
+      var accountId = model.get('accountId');
+      console.log('startChatSession accountId: '+accountId);
+      
 			if( !this.chatSessions[accountId]) {
 				var chatSessionView = new ChatSessionView({
 					model: model,
 					socketEvents: this.socketEvents
 				});
+
+				this.$el.prepend(chatSessionView.render().el);
+				this.chatSessions[accountId] = chatSessionView;				
 			}
+      
 		},
 
 		renderCollection: function(collection) {

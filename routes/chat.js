@@ -19,10 +19,10 @@ module.exports = function(app, models) {
 			var signedCookies = cookie.parse(data.headers.cookie);
 
 			//var cookies = utils.parseSignedCookies(signedCookies, app.sessionSecret);
-			var cookies = cookieParser.signedCookie(signedCookies['express.sid'], app.sessionSecret);
+			var cookiesSid = cookieParser.signedCookie(signedCookies['express.sid'], app.sessionSecret);
 			
 			//data.sessionID = cookies['express.sid'];
-			data.sessionID = cookies;
+			data.sessionID = cookiesSid;
 
 			data.sessionStore = app.sessionStore;
 			data.sessionStore.get(data.sessionID, function(err, session) {
@@ -33,11 +33,10 @@ module.exports = function(app, models) {
 					accept(null, true);
 				}
 			});
-			
 		});
 
 		sio.sockets.on('connection', function(socket) {
-			console.log('ligando sockets');
+			console.log('ligando sockets de chat');
 			var session = socket.handshake.session;
 			var accountId = session.accountId;
 			var sAccount = null;
@@ -50,6 +49,7 @@ module.exports = function(app, models) {
 			});
 
 			var handleContactEvent = function(eventMessage) {
+				console.log('EMITINDO: ' + eventMessage);
 				socket.emit('contactEvent', eventMessage);
 			};
 

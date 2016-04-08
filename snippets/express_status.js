@@ -1,4 +1,6 @@
 app.post('/accounts/:id/status', function(req, res) {
+	console.log('SNIPPET DE STATUS');
+
 	var accountId = req.params.id == 'me'
 						? req.session.accountId
 						: req.params.id;
@@ -6,7 +8,7 @@ app.post('/accounts/:id/status', function(req, res) {
 	models.Account.findById(accountId, function(account) {
 		status = {
 			name: account.name,
-			status: req.params.status
+			status: req.param('status', '')
 		};
 
 		account.status.push(status);

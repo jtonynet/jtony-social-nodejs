@@ -18,6 +18,7 @@ define([
 			},
 
 			postStatus: function() {
+				console.log('postando status');
 				var that = this;
 				var statusText = $('input[name=status]').val();
 				var statusCollection = this.collection;
@@ -25,15 +26,17 @@ define([
 					status: statusText
 				});
 
-				return false;				
+				return false;
 			},
 
 			onSocketStatusAdded: function(data) {
+				console.log('recebendo status do socket');
 				var newStatus = data.data;
 				this.prependStatus(new Status({status: newStatus.status, name: newStatus.name}));
 			},
 
 			prependStatus: function(statusModel) {
+				console.log('exibindo status');
 				var statusHtml = (new StatusView({ model: statusModel })).render().el;
 				$(statusHtml).prependTo('.status_list').hide().fadeIn('slow');
 			},
@@ -51,7 +54,6 @@ define([
 				var statusCollection = this.model.get('status');
 				if(null != statusCollection) {
 					_.each(statusCollection, function(statusJson) {
-						//console.log(statusJson);
 						var statusModel = new Status(statusJson);
 						that.prependStatus(statusModel);
 					});
