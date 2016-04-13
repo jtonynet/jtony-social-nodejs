@@ -14,7 +14,7 @@ function(SocialNetView, ChatSessionView, ChatItemView, chatItemTemplate) {
 		chatSessions: {},
 
 		initialize: function(options) {
-      this.render();
+			this.render();
 			this.socketEvents = options.socketEvents;
 			this.collection.on('reset', this.renderCollection, this);
 		},
@@ -24,9 +24,9 @@ function(SocialNetView, ChatSessionView, ChatItemView, chatItemTemplate) {
 		},
 
 		startChatSession: function(model) {
-      var accountId = model.get('accountId');
-      console.log('startChatSession accountId: '+accountId);
-      
+			var accountId = model.get('accountId');
+			console.log('startChatSession accountId: '+accountId);
+
 			if( !this.chatSessions[accountId]) {
 				var chatSessionView = new ChatSessionView({
 					model: model,

@@ -42,7 +42,7 @@ function(sio, ContactCollection, ChatView) {
 			var eventName = eventObj.action+':'+eventObj.from;
 			eventDispatcher.trigger(eventName, eventObj);
 
-			if(eventObj.from === accountId) {
+			if(eventObj.from == accountId) {
 				eventName = eventObj.action + ":me";
 				eventDispatcher.trigger(eventName, eventObj); 
 			}

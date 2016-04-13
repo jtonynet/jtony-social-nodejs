@@ -55,6 +55,7 @@ module.exports = function(app, models) {
 
 			var subscribeToAccount = function(accountId) {
 				var eventName = 'event:' + accountId;
+
 				app.addEventListener(eventName, handleContactEvent);
 				console.log('Subscribing to ' + eventName);
 			};
@@ -67,7 +68,6 @@ module.exports = function(app, models) {
 					if(!subscribedAccounts[contact.accountId]) {
 						subscribeToAccount(contact.accountId);
 						subscribedAccounts[contact.accountId] = true;
-						subscribedAccounts
 					}
 				});
 
@@ -88,7 +88,7 @@ module.exports = function(app, models) {
 				});
 			});
 
-			socket.on('chatClient', function(data) {
+			socket.on('chatclient', function(data) {
 				sio.sockets.in(data.to).emit('chatserver', {
 					from: accountId,
 					text: data.text
