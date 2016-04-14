@@ -84,11 +84,15 @@ module.exports = function(app, config, mongoose, nodemailer) {
 				//invalid email
 				callback(false);
 			} else {
-				var smtpTransport = nodemailer.createTransport('SMTP', config.mail);
+				console.log(doc.email);
+				console.log(config.mail);
+
+				var smtpTransport = nodemailer.createTransport(config.mail);
 				resetPasswordUrl += '?account='+doc._id;
 
+				
 				smtpTransport.sendMail({
-						from: 'thisapp@example.com',
+						from: 'jtony.social.nodejs@gmail.com',
 						to: doc.email,
 						subject: 'SocialNet password Request',
 						text: 'Click here to reset your password: ' + resetPasswordUrl
@@ -99,6 +103,7 @@ module.exports = function(app, config, mongoose, nodemailer) {
 						callback(true);
 					}
 				});
+				
 			}
 		});
 	};
