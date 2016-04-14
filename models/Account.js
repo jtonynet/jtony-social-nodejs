@@ -78,7 +78,7 @@ module.exports = function(app, config, mongoose, nodemailer) {
 		);
 	};
 
-	var forgotPassword = function(email, resetPassword, callback) {
+	var forgotPassword = function(email, resetPasswordUrl, callback) {
 		var user = Account.findOne({email: email}, function findAccount(err, doc) {
 			if(err) {
 				//invalid email
