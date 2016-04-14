@@ -31,7 +31,7 @@ function(SocialNetView, chatItemTemplate) {
 
 		handleContactLogin: function() {
 			this.model.set('online', true),
-			this.$el.find('.online_indicator').addClass('online');			
+			this.$el.find('.online_indicator').addClass('online');
 		},
 
 		handleContactLogout: function() {
