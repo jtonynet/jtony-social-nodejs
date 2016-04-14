@@ -10,7 +10,7 @@ module.exports = function(app, config, mongoose, nodemailer) {
 	});
 
 	var schemaOptions = {
-		toJson: {
+		toJSON: {
 			virtuals: true
 		},
 
@@ -72,7 +72,7 @@ module.exports = function(app, config, mongoose, nodemailer) {
 			{_id:accountId}, 
 			{$set: {password: hashedPassword}},
 			{upsert: false},
-			function changePasswordCallback() {
+			function changePasswordCallback(err) {
 				console.log('Change password done for account ' + accountId);
 			}
 		);
@@ -166,7 +166,7 @@ module.exports = function(app, config, mongoose, nodemailer) {
 		});
 
 		return false;
-	};	
+	};
 
 	var register = function(email, password, firstName, lastName) {
 		var shaSum = crypto.createHash('sha256');
@@ -184,7 +184,7 @@ module.exports = function(app, config, mongoose, nodemailer) {
 		});
 		user.save(registerCallback);
 		console.log('Save command was sent');
-	}
+	};
 
 	return {
 		findById: findById,

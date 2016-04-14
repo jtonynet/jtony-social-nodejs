@@ -20,10 +20,6 @@ app.removeEventListener = function(eventName, callback) {
 };
 
 app.triggerEvent = function(eventName, eventOptions) {
-	console.log(eventName);
-	console.log('---------------------');
-	console.log(eventOptions);
-	
 	eventDispatcher.emit(eventName, eventOptions);
 };
 

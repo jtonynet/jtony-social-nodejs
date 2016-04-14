@@ -25,8 +25,7 @@ function(SocialNetView, ChatSessionView, ChatItemView, chatItemTemplate) {
 
 		startChatSession: function(model) {
 			var accountId = model.get('accountId');
-			console.log('startChatSession accountId: '+accountId);
-
+			
 			if( !this.chatSessions[accountId]) {
 				var chatSessionView = new ChatSessionView({
 					model: model,

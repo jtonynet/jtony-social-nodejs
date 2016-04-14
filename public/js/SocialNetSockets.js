@@ -8,16 +8,11 @@ function(sio, ContactCollection, ChatView) {
 			accountId = socketAccountId;
 			socket = io.connect();
 
-			console.log('<<<>>>>2');
-			console.log(socket);
-			console.log('>>><<<<2');
-
 			socket
 				.on('connect_failed', function(reason) {
 					console.error('unable to connect', reason);
 				})
 				.on('connect', function() {
-					console.log('LIGA A PORRA DOS DISPATCHER CARALHO TEM Q ENTRAR AQUI PORRA!!!');
 					eventDispatcher.bind('socket:chat', sendChat);
 					socket.on('chatserver', function(data) {
 						eventDispatcher.trigger('socket:chat:start:' + data.from);
@@ -36,9 +31,6 @@ function(sio, ContactCollection, ChatView) {
 		};
 
 		var handleContactEvent = function(eventObj) {
-			console.log('SocialNetSockets.handleContactEvent: ');
-			console.log(eventObj);
-
 			var eventName = eventObj.action+':'+eventObj.from;
 			eventDispatcher.trigger(eventName, eventObj);
 
