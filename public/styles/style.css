@@ -47,9 +47,9 @@ form {
 	float: left;
 	width: 15px;
 	height: 16px;
-	background-image: url('/images/trafficlight.png');
+	background-image: url('/public/images/trafficlight.png');
 }
 
-.online_indicator.online{
+.online_indicator.online {
 	background-position: -15px 0;
 }

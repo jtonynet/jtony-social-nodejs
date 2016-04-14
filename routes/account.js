@@ -44,9 +44,15 @@ module.exports = function(app, models) {
 
 			//send status for all friends
 			account.activity.push(status);
-			account.save(function (err) {
-				if (err) {
-					console.log('Error saving account: ' + err);
+			account.save(function(err) {
+				if(err) {
+					console.log('Error saving account ' + err);
+				} else {
+					app.triggerEvent('event:'+accountId, {
+						from: accountId,
+						data: status,
+						action: 'status'
+					});
 				}
 			});
 		});

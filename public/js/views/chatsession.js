@@ -8,7 +8,7 @@ function(SocialNetView, chatItemTemplate) {
 		$el: $(this.el),
 
 		events: {
-			'submit form': 'sendChat',
+			'submit form': 'sendChat'
 		},
 
 		initialize: function(options) {
@@ -40,9 +40,9 @@ function(SocialNetView, chatItemTemplate) {
 
 		handleContactLogout: function() {
 			this.model.set('online', false);
-			$onlineIndicador = this.$el.find('.online_indicator');
-			while( $onlineIndicador.hasClass('online') ) {
-				$onlineIndicador.removeClass('online');
+			$onlineIndicator = this.$el.find('.online_indicator');
+			while( $onlineIndicator.hasClass('online') ) {
+				$onlineIndicator.removeClass('online');
 			}
 		},
 
@@ -53,9 +53,11 @@ function(SocialNetView, chatItemTemplate) {
 
 		sendChat: function() {
 			var chatText = this.$el.find('input[name=chat]').val();
+
 			if ( chatText && /[^\s]+/.test(chatText) ) {
 				var chatLine = 'Me: ' + chatText;
 				this.$el.find('.chat_log').append($('<li>' + chatLine + '</li>'));
+
 				this.socketEvents.trigger('socket:chat', {
 					to: this.model.get('accountId'),
 					text: chatText
@@ -63,14 +65,14 @@ function(SocialNetView, chatItemTemplate) {
 			}
 
 			return false;
-		},		
+		},
 
 		render: function() {
 			this.$el.html(_.template(chatItemTemplate, {
 				model: this.model.toJSON()
 			}));
 			if (this.model.get('online') ){
-				this.handleContactLogout;
+				this.handleContactLogin();
 			}
 
 			return this;

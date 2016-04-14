@@ -9,7 +9,6 @@ var events 			= require('events');
 var mongoose		= require('mongoose');
 
 app.server 			= http.createServer(app);
-app.sessionStore	= new MemoryStore();
 
 var eventDispatcher = new events.EventEmitter();
 app.addEventListener = function(eventName, callback) {
@@ -23,6 +22,8 @@ app.removeEventListener = function(eventName, callback) {
 app.triggerEvent = function(eventName, eventOptions) {
 	eventDispatcher.emit(eventName, eventOptions);
 };
+
+app.sessionStore	= new MemoryStore();
 
 var config = {
 	mail: require('./config/mail')

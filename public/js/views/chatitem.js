@@ -10,6 +10,7 @@ function(SocialNetView, chatItemTemplate) {
 		},
 
 		initialize: function(options) {
+			this.model = options.model;
 			var accountId = this.model.get('accountId');
 			options.socketEvents.bind(
 				'login:'+accountId,
@@ -30,7 +31,7 @@ function(SocialNetView, chatItemTemplate) {
 
 		handleContactLogin: function() {
 			this.model.set('online', true),
-			this.$el.find('.online').addClass('online');
+			this.$el.find('.online_indicator').addClass('online');
 		},
 
 		handleContactLogout: function() {

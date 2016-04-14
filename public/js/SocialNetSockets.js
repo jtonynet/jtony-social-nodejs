@@ -25,6 +25,7 @@ function(sio, ContactCollection, ChatView) {
 					contactsCollection.url = '/accounts/me/contacts';
 					new ChatView({collection: contactsCollection,
 									socketEvents: eventDispatcher}).render;
+
 					contactsCollection.fetch();
 				});
 		};
@@ -33,7 +34,7 @@ function(sio, ContactCollection, ChatView) {
 			var eventName = eventObj.action+':'+eventObj.from;
 			eventDispatcher.trigger(eventName, eventObj);
 
-			if(eventObj.from === accountId) {
+			if(eventObj.from == accountId) {
 				eventName = eventObj.action + ":me";
 				eventDispatcher.trigger(eventName, eventObj); 
 			}

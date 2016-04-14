@@ -1,9 +1,6 @@
 module.exports = function(app, models) {
 	var io = require('socket.io');
-
-	//var utils = require('connect').utils;
 	var cookieParser = require('cookie-parser');
-
 	var cookie = require('cookie');
 	var Session = require('connect').middleware.session.Session;
 
@@ -17,12 +14,8 @@ module.exports = function(app, models) {
 
 		sio.set('authorization', function(data, accept) {
 			var signedCookies = cookie.parse(data.headers.cookie);
-
-			//var cookies = utils.parseSignedCookies(signedCookies, app.sessionSecret);
-			var cookies = cookieParser.signedCookie(signedCookies['express.sid'], app.sessionSecret);
-			
-			//data.sessionID = cookies['express.sid'];
-			data.sessionID = cookies;
+			var cookiesSid = cookieParser.signedCookie(signedCookies['express.sid'], app.sessionSecret);
+			data.sessionID = cookiesSid;
 
 			data.sessionStore = app.sessionStore;
 			data.sessionStore.get(data.sessionID, function(err, session) {
@@ -33,11 +26,9 @@ module.exports = function(app, models) {
 					accept(null, true);
 				}
 			});
-			
 		});
 
 		sio.sockets.on('connection', function(socket) {
-			console.log('ligando sockets');
 			var session = socket.handshake.session;
 			var accountId = session.accountId;
 			var sAccount = null;
@@ -55,6 +46,7 @@ module.exports = function(app, models) {
 
 			var subscribeToAccount = function(accountId) {
 				var eventName = 'event:' + accountId;
+
 				app.addEventListener(eventName, handleContactEvent);
 				console.log('Subscribing to ' + eventName);
 			};
@@ -67,7 +59,6 @@ module.exports = function(app, models) {
 					if(!subscribedAccounts[contact.accountId]) {
 						subscribeToAccount(contact.accountId);
 						subscribedAccounts[contact.accountId] = true;
-						subscribedAccounts
 					}
 				});
 
@@ -88,7 +79,7 @@ module.exports = function(app, models) {
 				});
 			});
 
-			socket.on('chatClient', function(data) {
+			socket.on('chatclient', function(data) {
 				sio.sockets.in(data.to).emit('chatserver', {
 					from: accountId,
 					text: data.text

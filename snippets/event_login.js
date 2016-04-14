@@ -1,4 +1,5 @@
 var handleContactEvent = function(eventMessage) {
+	console.log('CONTATO LOGOU: ' + eventMessage);
 	socket.emit(eventName, eventMessage);
 };
 
