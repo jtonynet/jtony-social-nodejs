@@ -29,7 +29,6 @@ module.exports = function(app, models) {
 		});
 
 		sio.sockets.on('connection', function(socket) {
-			console.log('ligando sockets de chat');
 			var session = socket.handshake.session;
 			var accountId = session.accountId;
 			var sAccount = null;
@@ -42,7 +41,6 @@ module.exports = function(app, models) {
 			});
 
 			var handleContactEvent = function(eventMessage) {
-				console.log('EMITINDO: ' + eventMessage);
 				socket.emit('contactEvent', eventMessage);
 			};
 
