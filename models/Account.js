@@ -87,6 +87,8 @@ module.exports = function(app, config, mongoose, nodemailer, sgTransport) {
 				var smtpTransport = nodemailer.createTransport(sgTransport(config.mail));
 				resetPasswordUrl += '?account='+doc._id;
 				
+				console.log(config.mail);
+
 				smtpTransport.sendMail({
 						from: 'jtony.social.nodejs@gmail.com',
 						to: doc.email,
