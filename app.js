@@ -1,6 +1,7 @@
 var express			= require('express');
 var http 			= require('http');
 var nodemailer		= require('nodemailer');
+var sgTransport 	= require('nodemailer-sendgrid-transport');
 var MemoryStore		= require('connect').session.MemoryStore;
 var app				= express();
 var dbPath			= process.env.MONGODB || 'mongodb://localhost/nodebackbone';
@@ -30,13 +31,13 @@ var config = {
 };
 
 var models = {
-	Account: require('./models/Account')(app, config, mongoose, nodemailer)
+	Account: require('./models/Account')(app, config, mongoose, nodemailer, sgTransport)
 };
 
 app.configure(function() {
 	app.sessionSecret = 'SocialNet Secret key';
 
-	app.httpSchema = process.env.PORT ? 'https' : 'http';
+	app.httpSchema = process.env.PORT ? 'https:' : 'http:';
 	app.processPort = process.env.PORT || 8083;
 
 	app.set('view engine', 'jade');

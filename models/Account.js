@@ -1,4 +1,4 @@
-module.exports = function(app, config, mongoose, nodemailer) {
+module.exports = function(app, config, mongoose, nodemailer, sgTransport) {
 	var crypto = require('crypto');
 
 	var Status = new mongoose.Schema({
@@ -84,12 +84,8 @@ module.exports = function(app, config, mongoose, nodemailer) {
 				//invalid email
 				callback(false);
 			} else {
-				console.log(doc.email);
-				console.log(config.mail);
-
-				var smtpTransport = nodemailer.createTransport(config.mail);
+				var smtpTransport = nodemailer.createTransport(sgTransport(config.mail));
 				resetPasswordUrl += '?account='+doc._id;
-
 				
 				smtpTransport.sendMail({
 						from: 'jtony.social.nodejs@gmail.com',
@@ -98,6 +94,7 @@ module.exports = function(app, config, mongoose, nodemailer) {
 						text: 'Click here to reset your password: ' + resetPasswordUrl
 				}, function forgotPasswordResult(err) {
 					if(err) {
+						console.log(err);
 						callback(false);
 					} else {
 						callback(true);

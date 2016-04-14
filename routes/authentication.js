@@ -66,7 +66,7 @@ module.exports = function(app, models) {
 
 	app.get('/resetpassword', function(req, res) {
 		var accountId = req.param('account', null);
-		res.render('resetPassword.jade', {locals: {accountId: accountId}});
+		res.render('resetPassword.jade', {accountId: accountId});
 	});
 
 	app.post('/resetpassword', function(req, res) {
