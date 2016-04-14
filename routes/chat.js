@@ -1,9 +1,6 @@
 module.exports = function(app, models) {
 	var io = require('socket.io');
-
-	//var utils = require('connect').utils;
 	var cookieParser = require('cookie-parser');
-
 	var cookie = require('cookie');
 	var Session = require('connect').middleware.session.Session;
 
@@ -17,11 +14,7 @@ module.exports = function(app, models) {
 
 		sio.set('authorization', function(data, accept) {
 			var signedCookies = cookie.parse(data.headers.cookie);
-
-			//var cookies = utils.parseSignedCookies(signedCookies, app.sessionSecret);
 			var cookiesSid = cookieParser.signedCookie(signedCookies['express.sid'], app.sessionSecret);
-			
-			//data.sessionID = cookies['express.sid'];
 			data.sessionID = cookiesSid;
 
 			data.sessionStore = app.sessionStore;
